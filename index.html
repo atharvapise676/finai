@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FinAI — AI-Powered Financial Health & Loan Intelligence Platform</title>
+  <meta name="description" content="AI-powered financial insights, loan affordability analysis, EMI calculations, budgeting and scenario planning — all in one place.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            finDark: '#080c14',
+            finCard: 'rgba(15, 23, 42, 0.75)',
+            finBorder: 'rgba(255, 255, 255, 0.08)',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #080c14;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(16, 185, 129, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 20%, rgba(6, 182, 212, 0.08) 0%, transparent 45%),
+        radial-gradient(circle at 50% 85%, rgba(99, 102, 241, 0.06) 0%, transparent 50%);
+      color: #f1f5f9;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .glass-panel {
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+    }
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 9999px;
+      height: 6px;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #10b981;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
+      border: 2px solid #ffffff;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+  <!-- Top Navigation -->
+  <header class="sticky top-0 z-50 w-full border-b border-white/10 bg-slate-950/80 backdrop-blur-xl">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
+      <div class="flex items-center gap-2.5">
+        <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-emerald-500 to-cyan-500 p-0.5">
+          <div class="flex h-full w-full items-center justify-center rounded-[10px] bg-slate-950">
+            <span class="text-emerald-400 font-extrabold text-sm">F</span>
+          </div>
+        </div>
+        <div>
+          <span class="text-xl font-bold tracking-tight text-white">Fin<span class="text-emerald-400">AI</span></span>
+          <span class="ml-1.5 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-semibold text-emerald-400 border border-emerald-500/20">LIVE</span>
+        </div>
+      </div>
+
+      <!-- Demo Persona Switcher -->
+      <div class="flex items-center gap-2">
+        <div class="hidden sm:flex items-center gap-1.5 text-xs text-slate-400 mr-2">
+          <span>Persona:</span>
+          <button onclick="switchPersona('aarav')" id="btn-aarav" class="px-2 py-1 rounded bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30">Aarav (Prime)</button>
+          <button onclick="switchPersona('priya')" id="btn-priya" class="px-2 py-1 rounded bg-slate-900 text-slate-300 border border-white/10">Priya (Balanced)</button>
+          <button onclick="switchPersona('rohit')" id="btn-rohit" class="px-2 py-1 rounded bg-slate-900 text-slate-300 border border-white/10">Rohit (Stretched)</button>
+        </div>
+
+        <a href="https://github.com/atharvapise676/finai" target="_blank" class="rounded-lg border border-white/10 bg-slate-900/80 px-3 py-1.5 text-xs font-semibold text-slate-200 hover:bg-white/10 flex items-center gap-1.5">
+          <span>GitHub Repo</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="mx-auto max-w-7xl px-4 sm:px-6 py-8 space-y-12 flex-1 w-full">
+    <!-- Hero Header -->
+    <div class="text-center space-y-4 max-w-3xl mx-auto pt-4">
+      <div class="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-1 text-xs font-semibold text-emerald-300">
+        <span>✨ Deterministic Financial Intelligence & Decision Support</span>
+      </div>
+      <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
+        Understand Your Finances.<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Plan Smarter.</span>
+      </h1>
+      <p class="text-sm sm:text-base text-slate-300 leading-relaxed">
+        AI-powered financial insights, loan affordability analysis, EMI calculations, budgeting, and scenario planning — all in one place.
+      </p>
+    </div>
+
+    <!-- Active Persona KPIs Strip -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div class="glass-panel rounded-2xl p-4">
+        <span class="text-[10px] uppercase font-semibold text-slate-400">Monthly Income</span>
+        <div class="mt-1 font-mono text-xl sm:text-2xl font-extrabold text-white" id="stat-income">₹85,000</div>
+        <span class="text-[10px] text-emerald-400 font-medium">Verified Inflow</span>
+      </div>
+      <div class="glass-panel rounded-2xl p-4">
+        <span class="text-[10px] uppercase font-semibold text-slate-400">Existing EMIs</span>
+        <div class="mt-1 font-mono text-xl sm:text-2xl font-extrabold text-cyan-400" id="stat-emi">₹8,000</div>
+        <span class="text-[10px] text-slate-400" id="stat-foir">FOIR: 9%</span>
+      </div>
+      <div class="glass-panel rounded-2xl p-4">
+        <span class="text-[10px] uppercase font-semibold text-slate-400">Liquid Savings</span>
+        <div class="mt-1 font-mono text-xl sm:text-2xl font-extrabold text-teal-300" id="stat-savings">₹1,80,000</div>
+        <span class="text-[10px] text-slate-400">Emergency Buffer</span>
+      </div>
+      <div class="glass-panel rounded-2xl p-4">
+        <span class="text-[10px] uppercase font-semibold text-slate-400">Credit Score</span>
+        <div class="mt-1 font-mono text-xl sm:text-2xl font-extrabold text-emerald-400" id="stat-score">780</div>
+        <span class="text-[10px] text-emerald-400 font-medium" id="stat-tier">Prime Tier</span>
+      </div>
+    </div>
+
+    <!-- Section 1: Financial Health Indicator (5 Pillars) -->
+    <div class="glass-panel rounded-2xl p-6 relative overflow-hidden">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
+        <div>
+          <span class="text-xs font-semibold uppercase tracking-wider text-emerald-400">Deterministic Indicator</span>
+          <h2 class="text-xl font-bold text-white tracking-tight mt-0.5">Financial Health Indicator</h2>
+        </div>
+        <span class="text-xs text-slate-400">5 Weighted Pillars</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+        <div class="md:col-span-4 flex flex-col items-center justify-center p-6 rounded-2xl border border-white/5 bg-slate-950/40 text-center">
+          <div class="relative flex items-center justify-center">
+            <div class="flex flex-col items-center">
+              <span class="text-5xl font-extrabold text-white font-mono" id="health-overall">82</span>
+              <span class="text-[10px] text-slate-400 font-semibold tracking-wider">OUT OF 100</span>
+            </div>
+          </div>
+          <span class="mt-3 rounded-full bg-emerald-500/20 px-3 py-1 text-xs font-bold text-emerald-300 border border-emerald-500/30" id="health-tier-badge">
+            Prime Tier
+          </span>
+          <p class="mt-2 text-xs text-slate-400" id="health-summary">
+            Your financial vitals are robust with disciplined debt control and comfortable liquidity reserves.
+          </p>
+        </div>
+
+        <div class="md:col-span-8 space-y-3.5">
+          <div class="space-y-1">
+            <div class="flex justify-between text-xs">
+              <span class="font-semibold text-slate-200">1. Debt Burden (FOIR) (30% weight)</span>
+              <span class="font-mono text-emerald-400 font-bold" id="pillar-debt">100 / 100</span>
+            </div>
+            <div class="h-2 w-full rounded-full bg-slate-800"><div id="bar-debt" class="h-full rounded-full bg-emerald-400" style="width: 100%"></div></div>
+          </div>
+          <div class="space-y-1">
+            <div class="flex justify-between text-xs">
+              <span class="font-semibold text-slate-200">2. Savings Buffer (25% weight)</span>
+              <span class="font-mono text-emerald-400 font-bold" id="pillar-savings">80 / 100</span>
+            </div>
+            <div class="h-2 w-full rounded-full bg-slate-800"><div id="bar-savings" class="h-full rounded-full bg-emerald-400" style="width: 80%"></div></div>
+          </div>
+          <div class="space-y-1">
+            <div class="flex justify-between text-xs">
+              <span class="font-semibold text-slate-200">3. Budget Discipline (20% weight)</span>
+              <span class="font-mono text-emerald-400 font-bold" id="pillar-budget">100 / 100</span>
+            </div>
+            <div class="h-2 w-full rounded-full bg-slate-800"><div id="bar-budget" class="h-full rounded-full bg-emerald-400" style="width: 100%"></div></div>
+          </div>
+          <div class="space-y-1">
+            <div class="flex justify-between text-xs">
+              <span class="font-semibold text-slate-200">4. Credit Profile (15% weight)</span>
+              <span class="font-mono text-emerald-400 font-bold" id="pillar-credit">100 / 100</span>
+            </div>
+            <div class="h-2 w-full rounded-full bg-slate-800"><div id="bar-credit" class="h-full rounded-full bg-emerald-400" style="width: 100%"></div></div>
+          </div>
+          <div class="space-y-1">
+            <div class="flex justify-between text-xs">
+              <span class="font-semibold text-slate-200">5. Income Stability (10% weight)</span>
+              <span class="font-mono text-emerald-400 font-bold" id="pillar-stability">95 / 100</span>
+            </div>
+            <div class="h-2 w-full rounded-full bg-slate-800"><div id="bar-stability" class="h-full rounded-full bg-emerald-400" style="width: 95%"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2: Interactive EMI Calculator -->
+    <div class="glass-panel rounded-2xl p-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
+        <div>
+          <span class="text-xs font-semibold uppercase tracking-wider text-emerald-400">Interactive Calculation</span>
+          <h2 class="text-xl font-bold text-white tracking-tight mt-0.5">Loan EMI & Cost Breakdown</h2>
+        </div>
+        <span class="text-xs text-slate-400">Deterministic Mathematical Formula</span>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-7 space-y-5">
+          <div>
+            <div class="flex justify-between text-xs mb-1">
+              <span class="text-slate-300 font-medium">Loan Amount (Principal)</span>
+              <span class="font-mono text-emerald-400 font-bold" id="disp-p">₹25,00,000</span>
+            </div>
+            <input type="range" id="input-p" min="100000" max="15000000" step="50000" value="2500000" oninput="recalcEMI()" class="w-full">
+          </div>
+
+          <div>
+            <div class="flex justify-between text-xs mb-1">
+              <span class="text-slate-300 font-medium">Annual Interest Rate</span>
+              <span class="font-mono text-cyan-400 font-bold" id="disp-r">8.5%</span>
+            </div>
+            <input type="range" id="input-r" min="0" max="20" step="0.1" value="8.5" oninput="recalcEMI()" class="w-full">
+          </div>
+
+          <div>
+            <div class="flex justify-between text-xs mb-1">
+              <span class="text-slate-300 font-medium">Tenure</span>
+              <span class="font-mono text-white font-bold" id="disp-n">15 Years (180 mo)</span>
+            </div>
+            <input type="range" id="input-n" min="1" max="30" step="1" value="15" oninput="recalcEMI()" class="w-full">
+          </div>
+        </div>
+
+        <div class="lg:col-span-5 rounded-2xl border border-white/10 bg-slate-950/60 p-6 space-y-4">
+          <div>
+            <span class="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Monthly Installment (EMI)</span>
+            <div class="text-3xl font-extrabold text-emerald-400 font-mono mt-1" id="emi-out">₹24,628</div>
+          </div>
+          <div class="space-y-1.5 text-xs border-t border-white/5 pt-3">
+            <div class="flex justify-between text-slate-400">
+              <span>Principal:</span>
+              <span class="font-mono text-white" id="p-out">₹25,00,000</span>
+            </div>
+            <div class="flex justify-between text-slate-400">
+              <span>Total Interest:</span>
+              <span class="font-mono text-cyan-400" id="i-out">₹19,33,040</span>
+            </div>
+            <div class="flex justify-between text-slate-200 font-bold border-t border-white/5 pt-1.5">
+              <span>Total Repayment:</span>
+              <span class="font-mono text-emerald-300" id="tot-out">₹44,33,040</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3: Explainable Loan Affordability -->
+    <div class="glass-panel rounded-2xl p-6">
+      <div class="flex justify-between items-center mb-4">
+        <div>
+          <span class="text-xs font-semibold uppercase tracking-wider text-emerald-400">Explainable Criteria</span>
+          <h2 class="text-xl font-bold text-white tracking-tight">Affordability Status</h2>
+        </div>
+        <span class="rounded-full bg-emerald-500/20 border border-emerald-500/30 px-3 py-1 text-xs font-bold text-emerald-300" id="afford-status">
+          Estimated within configured criteria
+        </span>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+        <div class="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4 space-y-1.5">
+          <span class="font-bold text-emerald-400 uppercase tracking-wider block">✓ Positive Supporting Factors</span>
+          <p id="pos-factors" class="text-slate-300 leading-relaxed">• Income of ₹85,000 supports requested loan.<br>• Existing obligations are well within 50% FOIR limit.<br>• Credit score (780) is prime.</p>
+        </div>
+        <div class="rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 space-y-1.5">
+          <span class="font-bold text-amber-400 uppercase tracking-wider block">⚠ Risk Attention Factors</span>
+          <p id="att-factors" class="text-slate-300 leading-relaxed">• Verify rate fluctuations if choosing a floating benchmark.<br>• Maintain at least 6 months emergency reserve.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Regulatory Compliance Banner -->
+    <div class="rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 text-xs text-amber-200/90">
+      <strong>Compliance Disclaimer:</strong> FinAI provides estimates, calculations, and educational financial information based on user assumptions. It does not guarantee loan approval, represent any bank or lender, or replace professional financial underwriting. Actual interest rates, sanction limits, and approval decisions remain at the sole discretion of regulated lenders.
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-white/10 bg-slate-950 py-6 text-center text-xs text-slate-500">
+    <p>© 2026 FinAI Technologies. Non-lending financial advisory & decision-support platform.</p>
+    <p class="mt-1"><a href="https://github.com/atharvapise676/finai" target="_blank" class="text-emerald-400 hover:underline">View Source Code on GitHub</a></p>
+  </footer>
+
+  <script>
+    const personas = {
+      aarav: {
+        name: "Aarav Sharma",
+        income: 85000,
+        expenses: 32000,
+        emi: 8000,
+        savings: 180000,
+        score: 780,
+        health: 82,
+        tier: "Prime Tier",
+        summary: "Your financial vitals are robust with disciplined debt control and comfortable liquidity reserves.",
+        debtPillar: 100,
+        savingsPillar: 80,
+        budgetPillar: 100,
+        creditPillar: 100,
+        status: "Estimated within configured criteria",
+        statusColor: "emerald"
+      },
+      priya: {
+        name: "Priya Patel",
+        income: 60000,
+        expenses: 25000,
+        emi: 5000,
+        savings: 80000,
+        score: 740,
+        health: 74,
+        tier: "Strong Tier",
+        summary: "Solid financial footing with balanced obligations and consistent disposable income.",
+        debtPillar: 100,
+        savingsPillar: 65,
+        budgetPillar: 85,
+        creditPillar: 85,
+        status: "Estimated within configured criteria",
+        statusColor: "emerald"
+      },
+      rohit: {
+        name: "Rohit Verma",
+        income: 45000,
+        expenses: 24000,
+        emi: 18000,
+        savings: 20000,
+        score: 640,
+        health: 52,
+        tier: "Stretched Tier",
+        summary: "High debt obligations (40% FOIR) and narrow emergency buffer create risk under economic shocks.",
+        debtPillar: 50,
+        savingsPillar: 30,
+        budgetPillar: 40,
+        creditPillar: 60,
+        status: "Requires review / High debt burden",
+        statusColor: "amber"
+      }
+    };
+
+    let activePersona = 'aarav';
+
+    function switchPersona(id) {
+      activePersona = id;
+      const p = personas[id];
+      ['aarav', 'priya', 'rohit'].forEach(k => {
+        const btn = document.getElementById('btn-' + k);
+        if (k === id) {
+          btn.className = "px-2 py-1 rounded bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30";
+        } else {
+          btn.className = "px-2 py-1 rounded bg-slate-900 text-slate-300 border border-white/10";
+        }
+      });
+
+      document.getElementById('stat-income').innerText = "₹" + p.income.toLocaleString();
+      document.getElementById('stat-emi').innerText = "₹" + p.emi.toLocaleString();
+      document.getElementById('stat-foir').innerText = "FOIR: " + Math.round((p.emi / p.income) * 100) + "%";
+      document.getElementById('stat-savings').innerText = "₹" + p.savings.toLocaleString();
+      document.getElementById('stat-score').innerText = p.score;
+      document.getElementById('stat-tier').innerText = p.tier;
+
+      document.getElementById('health-overall').innerText = p.health;
+      document.getElementById('health-tier-badge').innerText = p.tier;
+      document.getElementById('health-summary').innerText = p.summary;
+
+      document.getElementById('pillar-debt').innerText = p.debtPillar + " / 100";
+      document.getElementById('bar-debt').style.width = p.debtPillar + "%";
+      document.getElementById('pillar-savings').innerText = p.savingsPillar + " / 100";
+      document.getElementById('bar-savings').style.width = p.savingsPillar + "%";
+      document.getElementById('pillar-budget').innerText = p.budgetPillar + " / 100";
+      document.getElementById('bar-budget').style.width = p.budgetPillar + "%";
+      document.getElementById('pillar-credit').innerText = p.creditPillar + " / 100";
+      document.getElementById('bar-credit').style.width = p.creditPillar + "%";
+
+      document.getElementById('afford-status').innerText = p.status;
+    }
+
+    function recalcEMI() {
+      const P = Number(document.getElementById('input-p').value);
+      const R = Number(document.getElementById('input-r').value);
+      const N_yrs = Number(document.getElementById('input-n').value);
+      const n = N_yrs * 12;
+
+      document.getElementById('disp-p').innerText = "₹" + P.toLocaleString();
+      document.getElementById('disp-r').innerText = R + "%";
+      document.getElementById('disp-n').innerText = N_yrs + " Years (" + n + " mo)";
+
+      let emi = 0;
+      let totalInterest = 0;
+      let totalRepayment = 0;
+
+      if (P === 0) {
+        emi = 0;
+      } else if (R === 0) {
+        emi = Math.round(P / n);
+        totalRepayment = P;
+        totalInterest = 0;
+      } else {
+        const r = R / 12 / 100;
+        const factor = Math.pow(1 + r, n);
+        emi = Math.round((P * r * factor) / (factor - 1));
+        totalRepayment = emi * n;
+        totalInterest = Math.max(0, totalRepayment - P);
+      }
+
+      document.getElementById('emi-out').innerText = "₹" + emi.toLocaleString();
+      document.getElementById('p-out').innerText = "₹" + P.toLocaleString();
+      document.getElementById('i-out').innerText = "₹" + totalInterest.toLocaleString();
+      document.getElementById('tot-out').innerText = "₹" + totalRepayment.toLocaleString();
+    }
+
+    recalcEMI();
+  </script>
+</body>
+</html>
