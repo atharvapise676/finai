@@ -1,0 +1,143 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id            String          @id @default(cuid())
+  email         String          @unique
+  name          String
+  passwordHash  String
+  role          String          @default("user") // "user" | "admin"
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  profile       FinancialProfile?
+  budgets       Budget[]
+  goals         FinancialGoal[]
+  calculations  Calculation[]
+  auditLogs     AuditLog[]
+  conversations AIConversation[]
+  notifications Notification[]
+}
+
+model FinancialProfile {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  monthlyIncome   Float    @default(60000)
+  monthlyExpenses Float    @default(25000)
+  existingEmi     Float    @default(5000)
+  savings         Float    @default(80000)
+  emergencyFund   Float    @default(50000)
+  creditScore     Int      @default(760)
+  employmentType  String   @default("salaried") // salaried, self_employed, business, freelancer
+  age             Int      @default(30)
+  dependents      Int      @default(1)
+  
+  updatedAt       DateTime @updatedAt
+  createdAt       DateTime @default(now())
+}
+
+model Calculation {
+  id            String   @id @default(cuid())
+  userId        String?
+  user          User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  type          String   // "emi" | "affordability" | "stress_test" | "comparison"
+  inputData     String   // JSON stringified input
+  outputData    String   // JSON stringified output
+  createdAt     DateTime @default(now())
+}
+
+model Budget {
+  id            String          @id @default(cuid())
+  userId        String
+  user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  month         String          // "YYYY-MM"
+  income        Float
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  items         BudgetItem[]
+}
+
+model BudgetItem {
+  id          String   @id @default(cuid())
+  budgetId    String
+  budget      Budget   @relation(fields: [budgetId], references: [id], onDelete: Cascade)
+  category    String   // Housing, Food, Transport, Utilities, Entertainment, Healthcare, Debt, Savings, Other
+  allocated   Float
+  spent       Float    @default(0)
+}
+
+model FinancialGoal {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name          String
+  category      String   // Emergency, Home, Vehicle, Education, Travel, Retirement, Other
+  targetAmount  Float
+  currentAmount Float    @default(0)
+  targetDate    DateTime
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model EligibilityRule {
+  id            String   @id @default(cuid())
+  ruleVersion   String   @default("v1.0.0")
+  minIncome     Float    @default(25000)
+  maxFOIR       Float    @default(0.50) // 50% max debt burden
+  minCreditScore Int     @default(650)
+  maxLoanTenure Int      @default(360) // months
+  maxMultiplier Float    @default(60) // max loan = 60x monthly income
+  isActive      Boolean  @default(true)
+  updatedBy     String   @default("system")
+  updatedAt     DateTime @updatedAt
+  createdAt     DateTime @default(now())
+}
+
+model AIConversation {
+  id          String      @id @default(cuid())
+  userId      String?
+  user        User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+  title       String      @default("Financial Assessment Conversation")
+  createdAt   DateTime    @default(now())
+  messages    AIMessage[]
+}
+
+model AIMessage {
+  id             String         @id @default(cuid())
+  conversationId String
+  conversation   AIConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  role           String         // "user" | "assistant"
+  content        String
+  structuredData String?        // JSON summary, insights, disclaimers
+  createdAt      DateTime       @default(now())
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action    String   // "LOGIN", "UPDATE_PROFILE", "CALCULATE_LOAN", "RULE_CHANGE", "AI_QUERY", etc.
+  metadata  String?  // JSON string
+  ipAddress String?
+  createdAt DateTime @default(now())
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  message   String
+  type      String   @default("info") // "info" | "warning" | "success"
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
